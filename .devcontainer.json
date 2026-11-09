@@ -1,0 +1,33 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mads-hartmann.bash-ide-vscode",
+        "EditorConfig.EditorConfig",
+        "timonwong.shellcheck"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true,
+      "upgradePackages": false
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/P-manBrown/devcontainer-features/git-spice:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers-extra/features/bun:1": {},
+    "ghcr.io/P-manBrown/devcontainer-features/claude-code:1": {},
+    "ghcr.io/P-manBrown/devcontainer-features/claude-mem:1": {},
+    "ghcr.io/P-manBrown/devcontainer-features/codex:3": {},
+    "ghcr.io/P-manBrown/devcontainer-features/rtk:1": {
+      "claudeCodeHook": true
+    }
+  },
+  "mounts": [
+    "source=gh-config-${devcontainerId},target=/home/node/.config/gh,type=volume"
+  ],
+  "remoteUser": "node",
+  "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh"
+}
