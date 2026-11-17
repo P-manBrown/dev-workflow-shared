@@ -150,7 +150,7 @@ make_target() {
   "plansDirectory": "./.claude/plans",
   "hooks": {
     "SessionStart": [
-      {"matcher": "startup", "hooks": [{"type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/skills/project-setup/scripts/setup.sh --from-hook"}]}
+      {"matcher": "startup", "hooks": [{"type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/own-session-start.sh --from-hook"}]}
     ],
     "PreToolUse": [
       {"matcher": "Edit|Write|NotebookEdit", "hooks": [{"type": "command", "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/protect-shared-files.sh\""}]}
