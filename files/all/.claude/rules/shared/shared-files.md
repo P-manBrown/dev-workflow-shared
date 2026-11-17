@@ -3,6 +3,16 @@ paths:
   - ".claude/shared-files.json"
   - ".claude/rules/shared/shared-files.md"
   - ".claude/hooks/protect-shared-files.sh"
+  - ".claude/rules/shared/architecture-md-maintenance.md"
+  - ".claude/rules/shared/claude-md-maintenance.md"
+  - ".claude/rules/shared/decisions-maintenance.md"
+  - ".claude/rules/shared/gitkeep.md"
+  - ".claude/rules/shared/plans-maintenance.md"
+  - ".claude/rules/shared/tech-debt-maintenance.md"
+  - ".claude/skills/tech-debt-tracker/**"
+  - ".claude/skills/doc-gardening/**"
+  - ".claude/agents/rule-tester.md"
+  - ".claude/hooks/rule-tester-guard.sh"
 ---
 
 # 同期で配る共通ファイル
