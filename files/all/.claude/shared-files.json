@@ -1,0 +1,22 @@
+{
+  "copy": [
+    ".claude/shared-files.json",
+    ".claude/rules/shared/shared-files.md",
+    ".claude/hooks/protect-shared-files.sh"
+  ],
+  "delete": [
+    {"path": ".claude/skills/execution-plan", "repos": ["tascon-frontend"]},
+    {"path": ".claude/hooks/plan-worktree-check.sh", "repos": ["tascon-frontend"]},
+    {"path": ".claude/skills/gh-stack", "repos": ["tascon-backend", "tascon-frontend"]},
+    {"path": ".claude/skills/project-setup", "repos": ["tascon-backend", "tascon-frontend"]},
+    {"path": ".claude/skills/git-spice-workflow", "repos": ["devcontainer-features"], "replaced_by": ".claude/skills/git-spice-workflow/SKILL.md"},
+    {"path": ".claude/rules/architecture-md-maintenance.md", "replaced_by": ".claude/rules/shared/architecture-md-maintenance.md"},
+    {"path": ".claude/rules/claude-md-maintenance.md", "replaced_by": ".claude/rules/shared/claude-md-maintenance.md"},
+    {"path": ".claude/rules/decisions-maintenance.md", "replaced_by": ".claude/rules/shared/decisions-maintenance.md"},
+    {"path": ".claude/rules/gitkeep.md", "replaced_by": ".claude/rules/shared/gitkeep.md"},
+    {"path": ".claude/rules/plans-maintenance.md", "replaced_by": ".claude/rules/shared/plans-maintenance.md"},
+    {"path": ".claude/rules/tech-debt-maintenance.md", "replaced_by": ".claude/rules/shared/tech-debt-maintenance.md"},
+    {"path": ".claude/rules/hooks-authoring.md", "replaced_by": ".claude/rules/shared/hooks-authoring.md"},
+    {"path": ".claude/rules/scripts-authoring.md", "replaced_by": ".claude/rules/shared/scripts-authoring.md"}
+  ]
+}
