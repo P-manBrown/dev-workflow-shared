@@ -13,6 +13,8 @@ paths:
   - ".claude/skills/doc-gardening/**"
   - ".claude/agents/rule-tester.md"
   - ".claude/hooks/rule-tester-guard.sh"
+  - ".claude/rules/shared/hooks-authoring.md"
+  - ".claude/rules/shared/scripts-authoring.md"
 ---
 
 # 同期で配る共通ファイル
