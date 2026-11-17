@@ -12,7 +12,9 @@
     ".claude/skills/tech-debt-tracker",
     ".claude/skills/doc-gardening",
     ".claude/agents/rule-tester.md",
-    ".claude/hooks/rule-tester-guard.sh"
+    ".claude/hooks/rule-tester-guard.sh",
+    ".claude/rules/shared/hooks-authoring.md",
+    ".claude/rules/shared/scripts-authoring.md"
   ],
   "delete": [
     {"path": ".claude/skills/execution-plan", "repos": ["tascon-frontend"]},
