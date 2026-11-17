@@ -17,6 +17,7 @@ paths:
 - manifest `files/all/.claude/shared-files.json`: 配るものは`copy`、配る先から消すものは`delete`
 - `files/all/.claude/rules/shared/shared-files.md`の`paths`: `copy`のエントリごとに、ファイルは同じ道、ディレクトリとsubmoduleは`<道>/**`を、`copy`と同じ順に、二重引用符付きで1行に1つ書く
 - 配る先の`.claude/settings.json`へ差し込むhookの登録が変わるときは`sync/settings-hooks.json`
+- 直した後に`bash sync/tests/run.sh`を実行し、全件通ることを確かめる（テストはコミット済みの`HEAD`を読む）
 
 ## 配る先を増やす・減らすとき
 
