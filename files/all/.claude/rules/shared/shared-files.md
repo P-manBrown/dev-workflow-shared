@@ -20,6 +20,9 @@ paths:
   - ".lefthook/pre-commit/check-docs.sh"
   - ".lefthook/pre-commit/check-plan-completion.sh"
   - ".claude/skills/project-setup/SKILL.md"
+  - ".github/pull_request_template.md"
+  - ".github/ISSUE_TEMPLATE/task.md"
+  - ".github/COMMIT_CONVENTION/**"
 ---
 
 # 同期で配る共通ファイル
