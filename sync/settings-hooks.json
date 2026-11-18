@@ -8,6 +8,46 @@
           "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/protect-shared-files.sh\""
         }
       ]
+    },
+    {
+      "matcher": "SubagentHandback",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/record-check.sh\""
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/record-check.sh\""
+        }
+      ]
+    }
+  ],
+  "SubagentStop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/record-check.sh\""
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/check-docs-hook.sh\""
+        }
+      ]
     }
   ]
 }
