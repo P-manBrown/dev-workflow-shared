@@ -14,7 +14,12 @@
     ".claude/agents/rule-tester.md",
     ".claude/hooks/rule-tester-guard.sh",
     ".claude/rules/shared/hooks-authoring.md",
-    ".claude/rules/shared/scripts-authoring.md"
+    ".claude/rules/shared/scripts-authoring.md",
+    ".claude/hooks/check-docs-hook.sh",
+    ".claude/hooks/record-check.sh",
+    ".lefthook/pre-commit/check-docs.sh",
+    ".lefthook/pre-commit/check-plan-completion.sh",
+    ".claude/skills/project-setup/SKILL.md"
   ],
   "delete": [
     {"path": ".claude/skills/execution-plan", "repos": ["tascon-frontend"]},
