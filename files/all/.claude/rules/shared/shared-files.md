@@ -15,6 +15,10 @@ paths:
   - ".claude/hooks/rule-tester-guard.sh"
   - ".claude/rules/shared/hooks-authoring.md"
   - ".claude/rules/shared/scripts-authoring.md"
+  - ".claude/hooks/check-docs-hook.sh"
+  - ".claude/hooks/record-check.sh"
+  - ".lefthook/pre-commit/check-docs.sh"
+  - ".lefthook/pre-commit/check-plan-completion.sh"
 ---
 
 # 同期で配る共通ファイル
