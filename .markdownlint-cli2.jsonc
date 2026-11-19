@@ -5,7 +5,8 @@
     },
     "MD013": false,
     "MD033": false,
-    "MD041": false
+    "MD041": false,
+    "MD060": false
   },
   "ignores": [
     ".github/COMMIT_CONVENTION/**",
