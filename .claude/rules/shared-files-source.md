@@ -25,7 +25,8 @@ paths:
 - 外のActionは40文字のコミットのIDで固定し、行に`# vX.Y.Z`の注記を付ける
 - 配る台本の試しは`files/all/<台本の道>/tests/run.sh`に置く
 - 初めて`.github/workflows/`を配る前に、同期のGitHub AppにWorkflowsの書き込みの権限があるかを確かめる
-- このリポジトリのCIに確かめのジョブを足すときは、`checks`の`needs`に入れる。必須のチェックに登録するのは`checks`だけ
+
+このリポジトリのCI（`.github/workflows/ci.yml`）に確かめのジョブを足すときは、`checks`の`needs`に入れる。必須のチェックに登録するのは`checks`だけ。
 
 ## 配る先を増やす・減らすとき
 
