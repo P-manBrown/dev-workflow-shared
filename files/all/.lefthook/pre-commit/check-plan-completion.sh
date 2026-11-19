@@ -15,6 +15,8 @@ script_dir=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd) || exit
 lib_dir="$script_dir/lib"
 top=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
 cd "$top" || exit 1
+# shellcheck source=lib/index.sh
+# shellcheck disable=SC2154
 . "$lib_dir/index.sh"
 
 active=docs/design/plans/active
@@ -63,6 +65,7 @@ done
 # Rule 1: each move keeps the plan and has its completion records.
 for name in "${moves[@]}"; do
   after_path="$completed/$name"
+  # shellcheck disable=SC2016
   while IFS=$'\x1f' read -r kind a b; do
     case "$kind" in
       E) problem "$after_path" "$a" ;;
@@ -121,6 +124,7 @@ for path in "${!change[@]}"; do
     *) continue ;;
   esac
   [ "${change[$path]}" = M ] || continue
+  # shellcheck disable=SC2016
   while IFS= read -r message; do
     problem "$path" "$message"
   done < <(jq_md -rn --rawfile old <(head_text "$path") --rawfile new <(index_text "$path") --arg completed "$( [[ $path == "$completed"/* ]] && echo yes)" '
