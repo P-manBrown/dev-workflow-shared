@@ -1,0 +1,21 @@
+{
+  "config": {
+    "MD001": {
+      "front_matter_title": ""
+    },
+    "MD013": false,
+    "MD033": false,
+    "MD041": false
+  },
+  "ignores": [
+    ".github/COMMIT_CONVENTION/**",
+    "files/all/.github/COMMIT_CONVENTION/**",
+    "**/node_modules/**",
+    ".claude/skills/*.*/**",
+    ".claude/memory/**",
+    ".claude/worktrees/**",
+    ".gc-artifacts/**",
+    ".gc/**",
+    ".beads/**"
+  ]
+}
