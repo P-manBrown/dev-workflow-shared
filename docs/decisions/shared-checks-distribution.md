@@ -56,7 +56,7 @@
 ## Consequences
 
 - 同期のGitHub AppにWorkflowsの書き込みの権限が要る。この決定の時点では確かめていない。初めて`.github/workflows/`を配る前に確かめる
-- tascon-frontend・devcontainer-featuresには、`plan-completion`の`SKILL.md`無しで台本（`check-pr-body.sh`・`lib/markdown.jq`）だけが入る。`project-setup`（`SKILL.md`だけを配り、台本はリポジトリごとに持つ）の逆の形になる
+- tascon-frontend・devcontainer-featuresには、`plan-completion`の`SKILL.md`無しで台本（`check-pr-body.sh`・`lib/markdown.jq`）だけが入る。
 - `lib/markdown.jq`はbackendの`judge-completion.sh`と共用する。直すときは、backendの`judge-completion.sh`の試しも通ることを確かめる
 - 揃える作業（backendのmainに入った後）は、AGENTS.mdの「共通ファイルを足す・道を変える・やめるとき」の手順そのものになる: backendの版のファイルを`files/all/`に置き、manifestと`shared-files.md`を直し、`bash sync/tests/run.sh`とCIを通す
 - このリポジトリの必須のチェックは`checks`だけ。確かめのジョブを足すときは`checks`の`needs`に入れれば足り、必須のチェックを登録し直さなくてよい。登録し忘れても関門から漏れない
