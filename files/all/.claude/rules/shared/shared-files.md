@@ -19,6 +19,9 @@ paths:
   - ".claude/hooks/record-check.sh"
   - ".lefthook/pre-commit/check-docs.sh"
   - ".lefthook/pre-commit/check-plan-completion.sh"
+  - ".lefthook/pre-commit/check-links.sh"
+  - ".lefthook/pre-commit/lib/index.sh"
+  - ".claude/skills/plan-completion/scripts/lib/markdown.jq"
 ---
 
 # 同期で配る共通ファイル
