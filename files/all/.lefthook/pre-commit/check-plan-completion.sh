@@ -16,8 +16,8 @@ lib_dir="$script_dir/../../.claude/skills/plan-completion/scripts/lib"
 top=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
 cd "$top" || exit 1
 
-active=.claude/plans/active
-completed=.claude/plans/completed
+active=docs/design/plans/active
+completed=docs/design/plans/completed
 
 if git rev-parse --verify -q HEAD >/dev/null; then
   base=HEAD
@@ -33,7 +33,7 @@ done < <(git diff --cached --no-renames --name-status -z "$base")
 relevant=false
 for path in "${!change[@]}"; do
   case "$path" in
-    *.md | .claude/plans/* | .claude/specs/*) relevant=true ;;
+    *.md | docs/design/*) relevant=true ;;
   esac
   [ "${change[$path]}" = D ] && relevant=true
 done
@@ -213,11 +213,12 @@ for path in "${!change[@]}"; do
        else empty end)')
 done
 
-# Rule 5: a move keeps the specs.
+# Rule 5: a move keeps the designs.
 if [ "${#moves[@]}" -gt 0 ]; then
   for path in "${!change[@]}"; do
     case "$path" in
-      .claude/specs/*) [ "${change[$path]}" = D ] && problem "$path" "specs are not moved or deleted when a plan is completed" ;;
+      docs/design/plans/*) ;;
+      docs/design/*) [ "${change[$path]}" = D ] && problem "$path" "designs are not moved or deleted when a plan is completed" ;;
     esac
   done
 fi
