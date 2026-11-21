@@ -17,6 +17,15 @@ tascon-backend・tascon-frontend・devcontainer-featuresの3リポジトリへ�
 - 配る先の`.claude/settings.json`へ差し込むhookの登録が変わるときは`sync/settings-hooks.json`
 - 直した後に`bash sync/tests/run.sh`を実行し、全件通ることを確かめる（テストはコミット済みの`HEAD`を読む）
 
+ワークフロー（`.github/workflows/`の下）や台本を配るときは、次も守る。
+
+- ワークフローは、3リポジトリでそのまま動く中身にする。言語・規則の集まりをリポジトリごとに決め打ちしない
+- 外のActionは40文字のコミットのIDで固定し、行に`# vX.Y.Z`の注記を付ける
+- 配る台本の試しは`files/all/<台本の道>/tests/run.sh`に置く
+- 初めて`.github/workflows/`を配る前に、同期のGitHub AppにWorkflowsの書き込みの権限があるかを確かめる
+
+このリポジトリのCI（`.github/workflows/ci.yml`）に確かめのジョブを足すときは、`checks`の`needs`に入れる。必須のチェックに登録するのは`checks`だけ。
+
 ## `files/all/`のルール・Skill・agentを変えるときのテスト
 
 - 配る先のリポジトリ（tascon-backend）のworktreeに、変更後のファイルを同期後と同じ道で置く。元の道に同じ名前のルールがあれば、そのworktreeの中で消す
@@ -78,3 +87,5 @@ tascon-backend・tascon-frontend・devcontainer-featuresの3リポジトリへ�
 - 配る一覧（manifest）→`files/all/.claude/shared-files.json`
 - 同期の処理→`sync/sync.sh`、そのテスト→`sync/tests/`（`bash sync/tests/run.sh`）
 - 同期のワークフロー→`.github/workflows/sync.yml`
+- このリポジトリのCI→`.github/workflows/ci.yml`（`test`・`shellcheck`・`markdownlint`と、まとめ役の`checks`）。設定は直下の`.shellcheckrc`・`.markdownlint-cli2.jsonc`
+- 設計判断の記録→`docs/decisions/`（共通の確かめの配り方→`docs/decisions/shared-checks-distribution.md`）
