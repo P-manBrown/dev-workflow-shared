@@ -15,6 +15,8 @@ script_dir=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd) || exit
 lib_dir="$script_dir/lib"
 top=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
 cd "$top" || exit 1
+# shellcheck source=lib/index.sh
+# shellcheck disable=SC2154
 . "$lib_dir/index.sh"
 
 load_changes
@@ -22,6 +24,7 @@ load_changes
 # links_of <md path>: "target<US>anchor<US>link" for each local link, where
 # <US> is U+001F (a separator that read does not collapse, unlike a tab).
 links_of() {
+  # shellcheck disable=SC2016
   index_text "$1" | jq_md -Rrs --arg file "$1" '
     include "markdown";
     ($file | split("/") | .[:-1] | join("/")) as $dir

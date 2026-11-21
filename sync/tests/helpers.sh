@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # sync/tests の共通の関数。各テストから source する
 set -euo pipefail
 
@@ -118,6 +119,7 @@ make_source() {
   write_file "$src/files/all/.claude/skills/demo/SKILL.md" 'demo skill'
   write_file "$src/files/all/.claude/skills/demo/scripts/run.sh" '#!/usr/bin/env bash'
   chmod 755 "$src/files/all/.claude/skills/demo/scripts/run.sh"
+  # shellcheck disable=SC2016
   write_file "$src/sync/settings-hooks.json" '{
   "PreToolUse": [
     {
@@ -146,6 +148,7 @@ make_target() {
   write_file "$dst/.claude/rules/replaced.md" 'replaced'
   write_file "$dst/.claude/hooks/old-hook.sh" '#!/usr/bin/env bash'
   write_file "$dst/.claude/skills/demo/stale.md" 'stale'
+  # shellcheck disable=SC2016
   write_file "$dst/.claude/settings.json" '{
   "plansDirectory": "./.claude/plans",
   "hooks": {
@@ -175,6 +178,8 @@ make_target() {
 # run_sync <正本> <配る先> <名前>: 標準出力を $sync_out、終了コードを $sync_status に入れる
 run_sync() {
   sync_status=0
+  # shellcheck disable=SC2034
   sync_out=$(bash "$SYNC" "$1" "$2" "$3" 2>"$WORK/sync-stderr") || sync_status=$?
+  # shellcheck disable=SC2034
   sync_err=$(cat "$WORK/sync-stderr")
 }
