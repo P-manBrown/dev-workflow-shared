@@ -18,7 +18,10 @@
     ".claude/hooks/check-docs-hook.sh",
     ".claude/hooks/record-check.sh",
     ".lefthook/pre-commit/check-docs.sh",
-    ".lefthook/pre-commit/check-plan-completion.sh"
+    ".lefthook/pre-commit/check-plan-completion.sh",
+    ".lefthook/pre-commit/check-links.sh",
+    ".lefthook/pre-commit/lib/index.sh",
+    ".claude/skills/plan-completion/scripts/lib/markdown.jq"
   ],
   "delete": [
     {"path": ".claude/skills/execution-plan", "repos": ["tascon-frontend"]},
