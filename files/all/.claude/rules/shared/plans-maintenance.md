@@ -7,7 +7,7 @@ paths:
 
 ## 構成
 
-planファイルは`Context/Purpose`、`Decision Log`、`Validation and Acceptance`等のセクションを持つ。
+planファイルは`Summary`、`Current System`、`Proposed Implementation`、`Non-Goals`、`Verification`、`Decision Log`のセクションをこの順に持つ。
 
 - planファイルの先頭（見出しの直後）に`Spec:`行を置き、そのplanが基づく設計のパスをリポジトリの根から書く
 - 設計が無いplanは`Spec: N/A`と書き、同じ行に続けて設計が無い理由を書く
@@ -27,9 +27,12 @@ planファイルは`Context/Purpose`、`Decision Log`、`Validation and Acceptan
 
 ## 各セクションの用途
 
+- `Summary`: 前提知識のない別セッションのClaude Codeが、これを読むだけで作業を再開できる状態を保つ
+- `Current System`: 変更前の現状を記録する
+- `Proposed Implementation`: 実装方針と段ごとの作業を記録する
+- `Non-Goals`: そのplanで扱わないことを記録する
+- `Verification`: そのplanの完了条件(受け入れ基準)を記録する。最後の段のPRを作る前の判定は`git-spice-workflow` skill、マージ後の判定は`plan-completion` skillに従う。mainへのマージ後でないと確かめられない項目には「マージ後に判定」と明記する
 - `Decision Log`: 決定事項とその理由を記録する。設計判断を含む提案にユーザーが同意したら、次の作業に移る前にその場で追記する
-- `Context/Purpose`: 前提知識のない別セッションのClaude Codeが、これを読むだけで作業を再開できる状態を保つ
-- `Validation and Acceptance`: そのplanの完了条件(受け入れ基準)を記録する。最後の段のPRを作る前の判定は`git-spice-workflow` skill、マージ後の判定は`plan-completion` skillに従う。mainへのマージ後でないと確かめられない項目には「マージ後に判定」と明記する
 
 ## PRとの対応
 
