@@ -179,8 +179,8 @@ def plan_section_lines($name; $kinds):
     end)
   | .out;
 
-# Items of "## Validation and Acceptance" that say "マージ後に判定".
+# Items of "## Verification" that say "マージ後に判定".
 def post_merge_items:
-  plan_items("Validation and Acceptance") | map(select(any(.lines[]; contains("マージ後に判定"))));
+  plan_items("Verification") | map(select(any(.lines[]; contains("マージ後に判定"))));
 
 def transfer_records: [.records[] | select(.kind == "書き写した" or .kind == "書き写さない")];

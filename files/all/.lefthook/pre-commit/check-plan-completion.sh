@@ -93,9 +93,9 @@ for name in "${moves[@]}"; do
                | ["T", (if $h == null then . else .[:$h] end), (if $h == null then "" else .[$h + 1:] end)] | join("\u001f")
              end
          end),
-      (if ($before | plan_section_lines("Validation and Acceptance"; ["結果", "根拠"]))
-          != ($after | plan_section_lines("Validation and Acceptance"; ["結果", "根拠"]))
-       then e("Validation and Acceptance differs from the active plan apart from 結果:/根拠: lines")
+      (if ($before | plan_section_lines("Verification"; ["結果", "根拠"]))
+          != ($after | plan_section_lines("Verification"; ["結果", "根拠"]))
+       then e("Verification differs from the active plan apart from 結果:/根拠: lines")
        else empty end),
       ($after | post_merge_items | to_entries[]
        | (.key + 1) as $n | .value.records as $r
