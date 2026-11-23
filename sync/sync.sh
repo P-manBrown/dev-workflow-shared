@@ -120,31 +120,29 @@ write_blob() {
   fi
 }
 
-set_gitmodule() {
-  local path=$1 key value name="" url
-  src_show .gitmodules >"$tmp_dir/gitmodules" || die "not found: .gitmodules"
+# 配る先が path を submodule として持っていたら、.gitmodules の該当の節を外す。残りの節が無ければ .gitmodules も消す
+drop_gitmodule() {
+  local path=$1 key value name
+  [ -f "$dst/.gitmodules" ] || return 0
   while read -r key value; do
-    if [ "$value" = "files/all/$path" ]; then
+    if [ "$value" = "$path" ] || [[ $value == "$path"/* ]]; then
       name=${key%.path}
+      git config -f "$dst/.gitmodules" --remove-section "$name"
     fi
-  done < <(git config -f "$tmp_dir/gitmodules" --get-regexp '^submodule\..*\.path$')
-  [ -n "$name" ] || die "no .gitmodules entry for files/all/$path"
-  url=$(git config -f "$tmp_dir/gitmodules" --get "$name.url") || die "no url for files/all/$path"
-  git config -f "$dst/.gitmodules" "submodule.$path.path" "$path"
-  git config -f "$dst/.gitmodules" "submodule.$path.url" "$url"
-  git -C "$dst" add -- .gitmodules
+  done < <(git config -f "$dst/.gitmodules" --get-regexp '^submodule\..*\.path$')
+  if [ -z "$(git config -f "$dst/.gitmodules" --name-only --list)" ]; then
+    git -C "$dst" rm -q -f -- .gitmodules
+  else
+    git -C "$dst" add -- .gitmodules
+  fi
 }
 
 for path in "${copy[@]}"; do
   read -r mode type sha _ <<<"$(src_entry "$path")"
   git -C "$dst" rm -r -q --cached --ignore-unmatch -- "$path" >/dev/null
   rm -rf "${dst:?}/$path"
+  drop_gitmodule "$path"
   case $type in
-    commit)
-      mkdir -p "$dst/$path"
-      git -C "$dst" update-index --add --cacheinfo "160000,$sha,$path"
-      set_gitmodule "$path"
-      ;;
     blob)
       write_blob "$mode" "$sha" "$path"
       ;;

@@ -40,11 +40,6 @@ write_rule "$WORK/paths-dir" ".claude/shared-files.json" ".claude/rules/shared/s
 commit_all "$WORK/paths-dir"
 expect_stop "directory without /**" "$WORK/paths-dir" "paths missing in shared-files.md: .claude/skills/demo/**"
 
-make_source "$WORK/paths-gitlink"
-write_rule "$WORK/paths-gitlink" ".claude/shared-files.json" ".claude/rules/shared/shared-files.md" ".claude/hooks/protect-shared-files.sh" ".claude/skills/demo/**" ".github/COMMIT_CONVENTION"
-commit_all "$WORK/paths-gitlink"
-expect_stop "gitlink without /**" "$WORK/paths-gitlink" "paths missing in shared-files.md: .github/COMMIT_CONVENTION/**"
-
 rm -rf "$WORK/dst"
 make_target "$WORK/dst"
 printf '{ not json' >"$WORK/dst/.claude/settings.json"

@@ -4,7 +4,6 @@ set -euo pipefail
 TESTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd "$TESTS_DIR/../.." && pwd)
 SYNC="$REPO_ROOT/sync/sync.sh"
-COMMIT_CONVENTION_SHA=705da6bcc1fd65c39f3fb33b295442456e958ae9
 COMMIT_CONVENTION_URL=https://github.com/P-manBrown/commit-convention.git
 
 failures=0
@@ -128,11 +127,9 @@ make_source() {
     }
   ]
 }'
-  git -C "$src" config -f .gitmodules submodule.files/all/.github/COMMIT_CONVENTION.path files/all/.github/COMMIT_CONVENTION
-  git -C "$src" config -f .gitmodules submodule.files/all/.github/COMMIT_CONVENTION.url "$COMMIT_CONVENTION_URL"
+  write_file "$src/files/all/.github/COMMIT_CONVENTION/COMMIT_CONVENTION.md" 'convention'
+  write_file "$src/files/all/.github/COMMIT_CONVENTION/.gitmessage" 'message'
   git -C "$src" add -A
-  git -C "$src" update-index --add --cacheinfo "160000,$COMMIT_CONVENTION_SHA,files/all/.github/COMMIT_CONVENTION"
-  mkdir -p "$src/files/all/.github/COMMIT_CONVENTION"
   git -C "$src" commit -q -m fixture
 }
 

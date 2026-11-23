@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# copy: ファイル・ディレクトリ・実行権限・gitlink と .gitmodules
+# copy: ファイル・ディレクトリ・実行権限・submodule からファイルへの置き換え
 source "$(dirname "$0")/helpers.sh"
 
 make_source "$WORK/src"
@@ -12,10 +12,11 @@ assert_file "directory files are copied" "$WORK/dst/.claude/skills/demo/scripts/
 assert_no_file "directory is replaced as a whole" "$WORK/dst/.claude/skills/demo/stale.md"
 assert_eq "executable mode is kept" 100755 "$(git -C "$WORK/dst" ls-files -s -- .claude/hooks/protect-shared-files.sh | cut -d' ' -f1)"
 assert_eq "non-executable mode is kept" 100644 "$(git -C "$WORK/dst" ls-files -s -- .claude/skills/demo/SKILL.md | cut -d' ' -f1)"
-assert_eq "gitlink is staged" "160000 $COMMIT_CONVENTION_SHA" "$(git -C "$WORK/dst" ls-files -s -- .github/COMMIT_CONVENTION | cut -d' ' -f1,2)"
-assert_eq ".gitmodules keeps one entry" ".github/COMMIT_CONVENTION" "$(git config -f "$WORK/dst/.gitmodules" --get-regexp '^submodule\..*\.path$' | cut -d' ' -f2)"
-assert_eq ".gitmodules entry name has no files/all" ".github/COMMIT_CONVENTION" "$(git config -f "$WORK/dst/.gitmodules" --get submodule..github/COMMIT_CONVENTION.path)"
-assert_eq ".gitmodules url comes from the source" "$COMMIT_CONVENTION_URL" "$(git config -f "$WORK/dst/.gitmodules" --get submodule..github/COMMIT_CONVENTION.url)"
+assert_eq "gitlink is replaced by files" "100644 100644" "$(git -C "$WORK/dst" ls-files -s -- .github/COMMIT_CONVENTION | cut -d' ' -f1 | paste -sd' ')"
+assert_file "convention file is copied" "$WORK/dst/.github/COMMIT_CONVENTION/COMMIT_CONVENTION.md"
+assert_file "gitmessage is copied" "$WORK/dst/.github/COMMIT_CONVENTION/.gitmessage"
+assert_no_file ".gitmodules is removed when it had no other entry" "$WORK/dst/.gitmodules"
+assert_eq ".gitmodules removal is staged" "" "$(git -C "$WORK/dst" ls-files -- .gitmodules)"
 assert_contains "copied paths are reported" "$sync_out" "copied: .claude/skills/demo"
 assert_contains "changes are reported" "$sync_out" "result: changed"
 
@@ -27,7 +28,18 @@ make_target_without_gitmodules() {
 make_target_without_gitmodules "$WORK/plain"
 run_sync "$WORK/src" "$WORK/plain" devcontainer-features
 assert_eq "sync into a repo without .gitmodules succeeds" 0 "$sync_status"
-assert_eq ".gitmodules is created" "$COMMIT_CONVENTION_URL" "$(git config -f "$WORK/plain/.gitmodules" --get submodule..github/COMMIT_CONVENTION.url)"
-assert_eq "no files/all entry in .gitmodules" "" "$(grep 'files/all' "$WORK/plain/.gitmodules" || true)"
+assert_no_file "no .gitmodules is created" "$WORK/plain/.gitmodules"
+
+make_target "$WORK/other"
+git -C "$WORK/other" config -f .gitmodules submodule.vendor/other.path vendor/other
+git -C "$WORK/other" config -f .gitmodules submodule.vendor/other.url https://example.com/other.git
+git -C "$WORK/other" add .gitmodules
+git -C "$WORK/other" update-index --add --cacheinfo "160000,2222222222222222222222222222222222222222,vendor/other"
+git -C "$WORK/other" commit -q -m other
+run_sync "$WORK/src" "$WORK/other" tascon-frontend
+assert_eq "sync into a repo with another submodule succeeds" 0 "$sync_status"
+assert_eq "only the other submodule stays in .gitmodules" "vendor/other" "$(git config -f "$WORK/other/.gitmodules" --get-regexp '^submodule\..*\.path$' | cut -d' ' -f2)"
+assert_eq "other gitlink is kept" 160000 "$(git -C "$WORK/other" ls-files -s -- vendor/other | cut -d' ' -f1)"
+assert_eq "convention gitlink is gone" 100644 "$(git -C "$WORK/other" ls-files -s -- .github/COMMIT_CONVENTION/COMMIT_CONVENTION.md | cut -d' ' -f1)"
 
 finish
