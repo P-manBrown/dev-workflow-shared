@@ -19,6 +19,15 @@ paths:
 - 配る先の`.claude/settings.json`へ差し込むhookの登録が変わるときは`sync/settings-hooks.json`
 - 直した後に`bash sync/tests/run.sh`を実行し、全件通ることを確かめる（テストはコミット済みの`HEAD`を読む）
 
+ワークフロー（`.github/workflows/`の下）や台本を配るときは、次も守る。
+
+- ワークフローは、配る先のすべてでそのまま動く中身にする。言語・規則の集まりをリポジトリごとに決め打ちしない
+- 外のActionは40文字のコミットのIDで固定し、行に`# vX.Y.Z`の注記を付ける
+- 配る台本の試しは`files/all/<台本の道>/tests/run.sh`に置く
+- 初めて`.github/workflows/`を配る前に、同期のGitHub AppにWorkflowsの書き込みの権限があるかを確かめる
+
+このリポジトリのCI（`.github/workflows/ci.yml`）に確かめのジョブを足すときは、`checks`の`needs`に入れる。必須のチェックに登録するのは`checks`だけ。
+
 ## 配る先を増やす・減らすとき
 
 - 配る先の一覧は`sync/targets.txt`だけ。1行に1リポジトリ名を書き、増やすときは1行足し、減らすときは1行消す
