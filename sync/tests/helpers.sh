@@ -104,7 +104,7 @@ make_source() {
     ".github/COMMIT_CONVENTION"
   ],
   "delete": [
-    {"path": ".claude/frontend-only.md", "repos": ["tascon-frontend"]},
+    {"path": ".claude/target-b-only.md", "repos": ["target-b"]},
     {"path": ".claude/rules/held.md", "replaced_by": ".claude/rules/shared/held.md"},
     {"path": ".claude/rules/replaced.md", "replaced_by": ".claude/skills/demo/SKILL.md"},
     {"path": ".claude/hooks/protect-shared-files.sh"},
@@ -138,7 +138,7 @@ make_target() {
   local dst=$1
   new_repo "$dst"
   write_file "$dst/README.md" 'target'
-  write_file "$dst/.claude/frontend-only.md" 'frontend only'
+  write_file "$dst/.claude/target-b-only.md" 'target b only'
   write_file "$dst/.claude/rules/held.md" 'held'
   write_file "$dst/.claude/rules/replaced.md" 'replaced'
   write_file "$dst/.claude/hooks/old-hook.sh" '#!/usr/bin/env bash'

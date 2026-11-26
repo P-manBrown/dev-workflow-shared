@@ -6,7 +6,7 @@ protect='bash "${CLAUDE_PROJECT_DIR}/.claude/hooks/protect-shared-files.sh"'
 
 make_source "$WORK/src"
 make_target "$WORK/dst"
-run_sync "$WORK/src" "$WORK/dst" tascon-backend
+run_sync "$WORK/src" "$WORK/dst" target-a
 settings="$WORK/dst/.claude/settings.json"
 
 assert_eq "sync succeeds" 0 "$sync_status"
@@ -21,7 +21,7 @@ assert_contains "inserted registrations are reported" "$sync_out" "hook: PreTool
 new_repo "$WORK/nosettings"
 write_file "$WORK/nosettings/README.md" 'no settings'
 commit_all "$WORK/nosettings"
-run_sync "$WORK/src" "$WORK/nosettings" devcontainer-features
+run_sync "$WORK/src" "$WORK/nosettings" target-c
 assert_eq "settings.json is created" "$(git -C "$WORK/src" show HEAD:sync/settings-hooks.json | jq -c .)" "$(jq -c .hooks "$WORK/nosettings/.claude/settings.json")"
 assert_eq "created settings.json has only hooks" '["hooks"]' "$(jq -c keys "$WORK/nosettings/.claude/settings.json")"
 

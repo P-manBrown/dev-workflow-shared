@@ -11,7 +11,26 @@ permissions:
   contents: read
 
 jobs:
+  targets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      repos: ${{ steps.list.outputs.repos }}
+    steps:
+      - name: Check out dev-workflow-shared
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read the target repositories
+        id: list
+        run: |
+          repos=$(grep -v '^[[:space:]]*$' sync/targets.txt | jq -R . | jq -sc .)
+          echo "repos=$repos" >>"$GITHUB_OUTPUT"
+
   sync:
+    needs: targets
     runs-on: ubuntu-latest
     environment: sync
     permissions:
@@ -22,10 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        repo:
-          - tascon-backend
-          - tascon-frontend
-          - devcontainer-features
+        repo: ${{ fromJSON(needs.targets.outputs.repos) }}
     env:
       REPO: ${{ matrix.repo }}
       SYNC_BRANCH: sync/dev-workflow-shared
@@ -98,7 +114,7 @@ jobs:
           git -C target commit --quiet -m "$PR_TITLE" -m "Source: P-manBrown/dev-workflow-shared@${source_sha}"
           git -C target push --force --quiet origin "$SYNC_BRANCH"
           {
-            echo "Sync the shared Claude Code files from P-manBrown/dev-workflow-shared."
+            echo "Sync the shared development workflow files from P-manBrown/dev-workflow-shared."
             echo
             echo "Source commit: P-manBrown/dev-workflow-shared@${source_sha}"
             echo

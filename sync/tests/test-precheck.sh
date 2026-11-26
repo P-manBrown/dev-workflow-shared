@@ -8,7 +8,7 @@ expect_stop() {
   make_target "$WORK/dst"
   local before
   before=$(git -C "$WORK/dst" rev-parse HEAD)
-  run_sync "$2" "$WORK/dst" tascon-backend
+  run_sync "$2" "$WORK/dst" target-a
   assert_eq "$1: sync fails" 1 "$sync_status"
   assert_contains "$1: reason is reported" "$sync_err" "$3"
   assert_eq "$1: target is untouched" "" "$(git -C "$WORK/dst" status --porcelain)"
@@ -17,7 +17,7 @@ expect_stop() {
 
 make_source "$WORK/ok"
 make_target "$WORK/dst"
-run_sync "$WORK/ok" "$WORK/dst" tascon-backend
+run_sync "$WORK/ok" "$WORK/dst" target-a
 assert_eq "matching paths pass" 0 "$sync_status"
 
 make_source "$WORK/missing-file"
@@ -44,7 +44,7 @@ rm -rf "$WORK/dst"
 make_target "$WORK/dst"
 printf '{ not json' >"$WORK/dst/.claude/settings.json"
 commit_all "$WORK/dst" "broken settings"
-run_sync "$WORK/ok" "$WORK/dst" tascon-backend
+run_sync "$WORK/ok" "$WORK/dst" target-a
 assert_eq "invalid settings.json: sync fails" 1 "$sync_status"
 assert_contains "invalid settings.json: reason is reported" "$sync_err" "not valid JSON: .claude/settings.json"
 assert_eq "invalid settings.json: target is untouched" "" "$(git -C "$WORK/dst" status --porcelain)"

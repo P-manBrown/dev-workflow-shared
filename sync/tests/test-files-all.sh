@@ -33,7 +33,7 @@ assert_eq "every hook in settings-hooks.json is in copy" "" "${unknown_hooks[*]}
 new_repo "$WORK/empty"
 write_file "$WORK/empty/README.md" 'empty'
 commit_all "$WORK/empty"
-run_sync "$REPO_ROOT" "$WORK/empty" devcontainer-features
+run_sync "$REPO_ROOT" "$WORK/empty" target-c
 assert_eq "this repository passes the precheck" 0 "$sync_status"
 [ -z "$sync_err" ] || printf '%s\n' "$sync_err"
 

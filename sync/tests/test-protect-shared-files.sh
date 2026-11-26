@@ -26,7 +26,7 @@ assert_eq "notebook under a copied directory: deny" deny "$(jq -r .hookSpecificO
 run_hook "{\"tool_name\":\"Edit\",\"cwd\":\"$WORK/repo\",\"tool_input\":{\"file_path\":\".claude/rules/shared/gitkeep.md\"}}"
 assert_eq "relative path: deny" deny "$(jq -r .hookSpecificOutput.permissionDecision <<<"$hook_out")"
 
-run_hook "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$WORK/repo/.claude/rules/backend-only.md\"}}"
+run_hook "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$WORK/repo/.claude/rules/target-a-only.md\"}}"
 assert_eq "own file: exit 0" 0 "$hook_status"
 assert_eq "own file: no output" "" "$hook_out"
 

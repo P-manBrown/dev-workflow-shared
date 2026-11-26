@@ -4,7 +4,7 @@ source "$(dirname "$0")/helpers.sh"
 
 make_source "$WORK/src"
 make_target "$WORK/dst"
-run_sync "$WORK/src" "$WORK/dst" tascon-backend
+run_sync "$WORK/src" "$WORK/dst" target-a
 
 assert_eq "sync succeeds" 0 "$sync_status"
 assert_eq "file is copied" "$(cat "$WORK/src/files/all/.claude/shared-files.json")" "$(cat "$WORK/dst/.claude/shared-files.json")"
@@ -26,7 +26,7 @@ make_target_without_gitmodules() {
   commit_all "$1"
 }
 make_target_without_gitmodules "$WORK/plain"
-run_sync "$WORK/src" "$WORK/plain" devcontainer-features
+run_sync "$WORK/src" "$WORK/plain" target-c
 assert_eq "sync into a repo without .gitmodules succeeds" 0 "$sync_status"
 assert_no_file "no .gitmodules is created" "$WORK/plain/.gitmodules"
 
@@ -36,7 +36,7 @@ git -C "$WORK/other" config -f .gitmodules submodule.vendor/other.url https://ex
 git -C "$WORK/other" add .gitmodules
 git -C "$WORK/other" update-index --add --cacheinfo "160000,2222222222222222222222222222222222222222,vendor/other"
 git -C "$WORK/other" commit -q -m other
-run_sync "$WORK/src" "$WORK/other" tascon-frontend
+run_sync "$WORK/src" "$WORK/other" target-b
 assert_eq "sync into a repo with another submodule succeeds" 0 "$sync_status"
 assert_eq "only the other submodule stays in .gitmodules" "vendor/other" "$(git config -f "$WORK/other/.gitmodules" --get-regexp '^submodule\..*\.path$' | cut -d' ' -f2)"
 assert_eq "other gitlink is kept" 160000 "$(git -C "$WORK/other" ls-files -s -- vendor/other | cut -d' ' -f1)"
