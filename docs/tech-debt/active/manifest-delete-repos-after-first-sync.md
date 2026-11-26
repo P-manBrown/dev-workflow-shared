@@ -1,4 +1,5 @@
 # manifestのdeleteにある配る先ごとのreposの指定を、最初の同期の後に消す
+
 - **Status:** Open
 - **Priority:** Low
 - **Category:** Infrastructure
