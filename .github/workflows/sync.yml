@@ -1,0 +1,158 @@
+name: Sync shared files
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "17 18 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  targets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      repos: ${{ steps.list.outputs.repos }}
+    steps:
+      - name: Check out dev-workflow-shared
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read the target repositories
+        id: list
+        run: |
+          repos=$(grep -v '^[[:space:]]*$' sync/targets.txt | jq -R . | jq -sc .)
+          echo "repos=$repos" >>"$GITHUB_OUTPUT"
+
+  sync:
+    needs: targets
+    runs-on: ubuntu-latest
+    environment: sync
+    permissions:
+      contents: read
+    concurrency:
+      group: sync-${{ matrix.repo }}
+      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      matrix:
+        repo: ${{ fromJSON(needs.targets.outputs.repos) }}
+    env:
+      REPO: ${{ matrix.repo }}
+      SYNC_BRANCH: sync/dev-workflow-shared
+      PR_TITLE: "chore: sync shared files from dev-workflow-shared"
+    steps:
+      - name: Create a GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.SYNC_APP_ID }}
+          private-key: ${{ secrets.SYNC_APP_PRIVATE_KEY }}
+          owner: P-manBrown
+          repositories: ${{ matrix.repo }}
+
+      - name: Check out dev-workflow-shared
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: source
+          persist-credentials: false
+
+      - name: Check out the target repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: P-manBrown/${{ matrix.repo }}
+          ref: main
+          token: ${{ steps.app-token.outputs.token }}
+          path: target
+
+      - name: Run sync.sh
+        id: sync
+        run: |
+          git -C target switch --quiet -C "$SYNC_BRANCH"
+          if ! bash source/sync/sync.sh source target "$REPO" >sync-output.txt 2>sync-error.txt; then
+            {
+              echo "## sync.sh failed for $REPO"
+              echo '```'
+              cat sync-error.txt
+              echo '```'
+            } >>"$GITHUB_STEP_SUMMARY"
+            cat sync-error.txt >&2
+            exit 1
+          fi
+          cat sync-output.txt
+          if grep -qx 'result: changed' sync-output.txt; then
+            echo "changed=true" >>"$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >>"$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit, push, and open or update the sync PR
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          report() {
+            {
+              echo "## $1 failed for $REPO"
+              echo '```'
+              printf '%s\n' "$2"
+              echo '```'
+            } >>"$GITHUB_STEP_SUMMARY"
+            printf '%s\n' "$2" >&2
+            exit 1
+          }
+          user_id=$(gh api "/users/${APP_SLUG}[bot]" --jq .id)
+          git -C target config user.name "${APP_SLUG}[bot]"
+          git -C target config user.email "${user_id}+${APP_SLUG}[bot]@users.noreply.github.com"
+          source_sha=$(git -C source rev-parse HEAD)
+          git -C target commit --quiet -m "$PR_TITLE" -m "Source: P-manBrown/dev-workflow-shared@${source_sha}"
+          git -C target push --force --quiet origin "$SYNC_BRANCH"
+          {
+            echo "Sync the shared development workflow files from P-manBrown/dev-workflow-shared."
+            echo
+            echo "Source commit: P-manBrown/dev-workflow-shared@${source_sha}"
+            echo
+            echo "## Copied"
+            sed -n 's/^copied: \(.*\)$/- `\1`/p' sync-output.txt
+            echo
+            echo "## Deleted"
+            if grep -q '^deleted: ' sync-output.txt; then
+              sed -n 's/^deleted: \(.*\)$/- `\1`/p' sync-output.txt
+            else
+              echo "- None"
+            fi
+            echo
+            echo "## Hook registrations in .claude/settings.json"
+            sed -n 's/^hook: \(.*\)$/- `\1`/p' sync-output.txt
+          } >pr-body.md
+          pr_number=$(gh pr list --repo "P-manBrown/$REPO" --head "$SYNC_BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -z "$pr_number" ]; then
+            out=$(gh pr create --repo "P-manBrown/$REPO" --base main --head "$SYNC_BRANCH" --title "$PR_TITLE" --body-file pr-body.md 2>&1) || report "gh pr create" "$out"
+          else
+            out=$(gh pr edit "$pr_number" --repo "P-manBrown/$REPO" --body-file pr-body.md 2>&1) || report "gh pr edit" "$out"
+          fi
+
+      - name: Close the sync PR when there is nothing to sync
+        if: steps.sync.outputs.changed == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          pr_number=$(gh pr list --repo "P-manBrown/$REPO" --head "$SYNC_BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$pr_number" ]; then
+            if ! out=$(gh pr close "$pr_number" --repo "P-manBrown/$REPO" --delete-branch 2>&1); then
+              {
+                echo "## gh pr close failed for $REPO"
+                echo '```'
+                printf '%s\n' "$out"
+                echo '```'
+              } >>"$GITHUB_STEP_SUMMARY"
+              printf '%s\n' "$out" >&2
+              exit 1
+            fi
+          fi
