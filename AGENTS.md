@@ -1,6 +1,6 @@
 # dev-workflow-shared
 
-tascon-backend・tascon-frontend・devcontainer-featuresの3リポジトリへ配る、Claude Codeの共通ファイル（ルール・Skill・hook・GitHubのテンプレート）の正本のリポジトリ。
+Claude Codeの共通ファイルの正本のリポジトリ。
 
 ## コーディング方針（全般）
 
@@ -12,7 +12,7 @@ tascon-backend・tascon-frontend・devcontainer-featuresの3リポジトリへ�
 - 複数解釈ある場合→選択肢を提示（黙って一つ選ばない）
 - よりシンプルな代替案があれば提案。過剰な要求には異議を
 - 不明点があれば実装を止め、何が不明か明言してから質問
-- 方式・設計を提案する前、既存の仕組み（hook・skill・rules・plan運用・ツール連携等）を追加・変更する前は、同じ課題を扱った過去の記録を「ナビゲーション」に沿って必ず確認する
+- 方式・設計を提案する前、既存の仕組み（hook・skill・rules・plan運用・ツール連携等）を追加・変更する前は、同じ課題を扱った過去の記録を必ず確認する
   - 過去に試して失敗した方式・採用しなかった方式は、その理由を解消しない限り再提案しない
   - 提案時は、確認した記録と、過去の方式との関係を示す
 
@@ -48,8 +48,3 @@ tascon-backend・tascon-frontend・devcontainer-featuresの3リポジトリへ�
 - 「Xをリファクタ」→「変更前後でテストが通ることを確認」
 - 複数ステップの作業→簡潔な計画を提示: `1. [ステップ] → 検証: [確認方法]`
 - 成功基準が強いほど自律的に作業継続可能。「うまく動くようにして」等の弱い基準は都度確認が必要
-
-## ナビゲーション
-
-- 特定タスク遂行時の作業手順（コミット・PR作成等）が必要な場合→`.claude/skills/` 配下の該当SKILL.mdを参照
-- コミットメッセージの規約→`.github/COMMIT_CONVENTION/COMMIT_CONVENTION.md`
