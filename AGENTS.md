@@ -1,6 +1,6 @@
 # dev-workflow-shared
 
-Claude Codeの共通ファイルの正本のリポジトリ。
+開発の流れで共通に使うファイルの正本のリポジトリ。Claude Codeのルール・Skill・hook、gitのhook（lefthook）の台本、GitHubのテンプレート、コミットの決まりを含む。
 
 ## コーディング方針（全般）
 
