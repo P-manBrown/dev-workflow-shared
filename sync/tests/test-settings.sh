@@ -2,6 +2,7 @@
 # settings.json への hook の登録の差し込み
 source "$(dirname "$0")/helpers.sh"
 
+# shellcheck disable=SC2016
 protect='bash "${CLAUDE_PROJECT_DIR}/.claude/hooks/protect-shared-files.sh"'
 
 make_source "$WORK/src"

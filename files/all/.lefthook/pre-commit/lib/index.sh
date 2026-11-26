@@ -1,3 +1,4 @@
+# shellcheck shell=bash disable=SC2034,SC2154
 # Readers of the index and HEAD shared by the pre-commit checks. Source it
 # inside the repository, after setting lib_dir to this directory.
 
