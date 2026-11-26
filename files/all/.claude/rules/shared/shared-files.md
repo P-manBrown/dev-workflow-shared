@@ -22,6 +22,9 @@ paths:
   - ".lefthook/pre-commit/check-links.sh"
   - ".lefthook/pre-commit/lib/index.sh"
   - ".claude/skills/plan-completion/scripts/lib/markdown.jq"
+  - ".github/pull_request_template.md"
+  - ".github/ISSUE_TEMPLATE/task.md"
+  - ".github/COMMIT_CONVENTION/**"
 ---
 
 # 同期で配る共通ファイル
